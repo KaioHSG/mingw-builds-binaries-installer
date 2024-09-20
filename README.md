@@ -8,4 +8,4 @@ MinGW-w64 compiler binaries.
 
 The installer provides options to select build parameters you need and extract files into the selected directory. It also creates an environment variable for the path to the binaries.
 
-![image](https://github.com/user-attachments/assets/2ba0cdfe-451a-4486-83a3-6fb81d57e226)
+![Installer](https://github.com/user-attachments/assets/dcf9ed40-94f5-4fe7-a74e-f16c040f153b)
