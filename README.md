@@ -1,10 +1,9 @@
-# MinGW-W64-binaries
+# MinGW-w64 Binaries
 
 [![x86_64 and i686 release builds](https://github.com/niXman/mingw-builds-binaries/actions/workflows/build.yml/badge.svg)](https://github.com/niXman/mingw-builds-binaries/actions/workflows/build.yml)
 
-MinGW-W64 compiler binaries
+MinGW-w64 compiler binaries.
 
-[MinGW-W64 online installer](https://github.com/Vuniverse0/mingwInstaller/releases/download/1.2.1/mingwInstaller.exe) ([VirusTotal](https://www.virustotal.com/gui/file/68214ff3d9ddd74538d7d96001173c952284b4c6b62608f6c3fcc447feca1a5d)), ([sources](https://github.com/Vuniverse0/mingwInstaller)).
+[MinGW-w64 Installer](https://github.com/KaioHSG/mingw-w64-binaries/blob/main/MinGW-w64-Installer.bat) ([VirusTotal](https://www.virustotal.com/gui/file/fca4b4454ce6c4ac8bac2c36dee747b1a430ed6f5717bff5f68ef29e880f3bb5)).
 
-The online installer provides GUI for selection parameters of build you need and archive extraction into selected dir. 
-It also creates a shortcut in start menu that runs terminal with added PATH to the compiler dir.
+The installer provides options to select build parameters you need and extract files into the selected directory. It also creates an environment variable for the path to the binaries.
