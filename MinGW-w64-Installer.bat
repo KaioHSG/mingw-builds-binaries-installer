@@ -10,6 +10,7 @@ whoami /groups | find "S-1-16-12288" > nul
 if %errorLevel% equ 0 (
    set administrator=1
 ) else (
+   set administrator=0
    echo * Run as administrator to be able to change the system variable, or continue with a local installation. *
    echo.
 )
@@ -68,7 +69,7 @@ if %errorLevel% equ 10 (
     set version=win32-seh-ucrt
 )
 echo --------------------------------------------------
-if administrator equ 1 (
+if %administrator% equ 1 (
    set installPath=C:\MinGW-w64
 ) else (
    set installPath=%userProfile%\MinGW-w64
@@ -100,7 +101,7 @@ del /q "%file%"
 echo %path% | findstr /i "%cd%\bin" > nul
 if %errorlevel% neq 0 (
     echo --------------------------------------------------  
-    if administrator equ 1 (
+    if %administrator% equ 1 (
         setx /m path "%cd%\bin";"%path%"
     ) else (
         setx path "%cd%\bin";"%path%"
