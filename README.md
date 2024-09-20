@@ -4,6 +4,6 @@
 
 MinGW-w64 compiler binaries.
 
-[MinGW-w64 Installer](https://github.com/KaioHSG/mingw-w64-binaries/archive/refs/heads/installer.zip) ([VirusTotal](https://www.virustotal.com/gui/search/https%253A%252F%252Fraw.githubusercontent.com%252FKaioHSG%252Fmingw-w64-binaries%252Frefs%252Fheads%252Finstaller%252FMinGW-w64-Installer.bat)).
+[MinGW-w64 Installer](https://github.com/KaioHSG/mingw-w64-binaries/archive/refs/heads/installer.zip) ([VirusTotal](https://www.virustotal.com/gui/search/https%253A%252F%252Fgithub.com%252FKaioHSG%252Fmingw-w64-binaries%252Farchive%252Frefs%252Fheads%252Finstaller.zip)).
 
 The installer provides options to select build parameters you need and extract files into the selected directory. It also creates an environment variable for the path to the binaries.
