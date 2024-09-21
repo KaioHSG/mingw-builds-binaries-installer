@@ -82,7 +82,7 @@ if %errorLevel% equ 2 (
 if not exist "%installPath%" (
    mkdir "%installPath%"
 )
-cd %installPath%
+pushd "%installPath%"
 curl -s https://api.github.com/repos/niXman/mingw-builds-binaries/releases/latest > %temp%\latest-release.json
 for /f "tokens=2 delims=:," %%A in ('findstr /i "tag_name" %temp%\latest-release.json') do set latestRelease=%%A
 del /q %temp%\latest-release.json
