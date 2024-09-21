@@ -1,12 +1,6 @@
 @echo off
-set version=1.0
+set version=1.1
 title MinGW-w64 Installer v%version%
-ping /n 1 github.com > nul
-if %errorLevel% neq 0 (
-   echo No server connection. Please check your internet connection and try again.
-   pause > nul
-   exit
-)
 whoami /groups | find "S-1-16-12288" > nul
 if %errorLevel% equ 0 (
    set administrator=1
@@ -83,9 +77,22 @@ if not exist "%installPath%" (
    mkdir "%installPath%"
 )
 pushd "%installPath%"
+ping /n 1 github.com > nul
+if %errorLevel% neq 0 (
+    if not exist "%~dp0\latest releases\%architecture%-*-release-%build%-*.7z" (
+        echo ##################################################
+        echo No server connection. Please check your internet connection and try again.
+        pause > nul
+        exit
+    )
+    for %%f in ("%~dp0\latest releases\%architecture%-*-release-%build%-*.7z") do (
+        set file=%%~nxf
+    )
+    goto :install
+)
 curl -s https://api.github.com/repos/niXman/mingw-builds-binaries/releases/latest > %temp%\latest-release.json
 for /f "tokens=2 delims=:," %%A in ('findstr /i "tag_name" %temp%\latest-release.json') do set latestRelease=%%A
-del /q %temp%\latest-release.json
+del /q "%temp%\latest-release.json"
 set "latestRelease=%latestRelease:~2,-1%"
 for /f "tokens=1,2,3 delims=-" %%A in ("%latestRelease%") do (
     set release=%%A
@@ -94,11 +101,18 @@ for /f "tokens=1,2,3 delims=-" %%A in ("%latestRelease%") do (
 )
 set file=%architecture%-%release%-release-%build%-%runtime%-%revision%.7z
 set url=https://github.com/niXman/mingw-builds-binaries/releases/download/%latestRelease%/%file%
+if not exist "%~dp0\latest releases" (
+    mkdir "%~dp0\latest releases"
+)
+if exist "%~dp0\latest releases\%architecture%-*-release-%build%-*.7z" (
+    del /q "%~dp0\latest releases\%architecture%-*-release-%build%-*.7z"
+)
 echo --------------------------------------------------
-curl -L -o %file% %url%
+curl -L -o "%~dp0\latest releases\%file%" %url%
+
+:install
 echo --------------------------------------------------
-tar -zxvf "%file%" -C "." --strip-components=1 "mingw64/*"
-del /q "%file%"
+tar -zxvf "%~dp0\latest releases\%file%" -C "." --strip-components=1 "mingw64/*"
 echo %path% | findstr /i "%cd%\bin" > nul
 if %errorlevel% neq 0 (
     echo --------------------------------------------------  
