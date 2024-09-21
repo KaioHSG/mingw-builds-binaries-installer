@@ -11,4 +11,4 @@ Download a [build](https://github.com/niXman/mingw-builds-binaries/releases/late
 
 The installer provides options to select build parameters you need and extract files into the selected directory. It also creates an environment variable for the path to the binaries.
 
-[![Installer](https://github.com/user-attachments/assets/dcf9ed40-94f5-4fe7-a74e-f16c040f153b)](#)
+[![Installer](https://github.com/user-attachments/assets/28b6bbc8-f3bc-47c7-a067-03791a6017c3)](#)
