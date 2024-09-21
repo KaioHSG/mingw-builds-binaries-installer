@@ -1,6 +1,6 @@
 # MinGW-w64 Binaries
 
-[![x86_64 and i686 release builds](https://github.com/niXman/mingw-builds-binaries/actions/workflows/build.yml/badge.svg)](https://github.com/niXman/mingw-builds-binaries/actions/workflows/build.yml)
+[![Build status](https://github.com/niXman/mingw-builds-binaries/actions/workflows/build.yml/badge.svg)](https://github.com/niXman/mingw-builds-binaries/actions/workflows/build.yml)
 
 MinGW-w64 compiler binaries.
 
