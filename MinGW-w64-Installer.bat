@@ -4,8 +4,10 @@ title MinGW-w64 Installer v%version%
 whoami /groups | find "S-1-16-12288" > nul
 if %errorLevel% equ 0 (
    set administrator=1
+   set installPath=C:\MinGW-w64
 ) else (
    set administrator=0
+   set installPath=%userProfile%\MinGW-w64
    echo * Run as administrator to be able to change the system variable, or continue with a local installation. *
    echo.
 )
@@ -64,19 +66,10 @@ if %errorLevel% equ 10 (
     set build=win32-seh-ucrt
 )
 echo --------------------------------------------------
-if %administrator% equ 1 (
-   set installPath=C:\MinGW-w64
-) else (
-   set installPath=%userProfile%\MinGW-w64
-)
 choice /c yn /m "Install MinGW-w64 in '%installPath%'"
 if %errorLevel% equ 2 (
    set /p installPath=Set install path: 
 )
-if not exist "%installPath%" (
-   mkdir "%installPath%"
-)
-pushd "%installPath%"
 ping /n 1 github.com > nul
 if %errorLevel% neq 0 (
     if not exist "%~dp0\latest releases\%architecture%-*-release-%build%-*.7z" (
@@ -111,6 +104,10 @@ echo --------------------------------------------------
 curl -L -o "%~dp0\latest releases\%file%" %url%
 
 :install
+if not exist "%installPath%" (
+   mkdir "%installPath%"
+)
+pushd "%installPath%"
 echo --------------------------------------------------
 tar -zxvf "%~dp0\latest releases\%file%" -C "." --strip-components=1 "mingw64/*"
 echo %path% | findstr /i "%cd%\bin" > nul
