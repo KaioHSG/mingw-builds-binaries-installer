@@ -72,13 +72,13 @@ if %errorLevel% equ 2 (
 )
 ping /n 1 github.com > nul
 if %errorLevel% neq 0 (
-    if not exist "%~dp0\latest releases\%architecture%-*-release-%build%-*.7z" (
+    if not exist "%~dp0\%architecture%-*-release-%build%-*.7z" (
         echo ##################################################
         echo No server connection. Please check your internet connection and try again.
         pause > nul
         exit
     )
-    for %%f in ("%~dp0\latest releases\%architecture%-*-release-%build%-*.7z") do (
+    for %%f in ("%~dp0\%architecture%-*-release-%build%-*.7z") do (
         set file=%%~nxf
     )
     goto :install
@@ -94,14 +94,11 @@ for /f "tokens=1,2,3 delims=-" %%A in ("%latestRelease%") do (
 )
 set file=%architecture%-%release%-release-%build%-%runtime%-%revision%.7z
 set url=https://github.com/niXman/mingw-builds-binaries/releases/download/%latestRelease%/%file%
-if not exist "%~dp0\latest releases" (
-    mkdir "%~dp0\latest releases"
-)
-if exist "%~dp0\latest releases\%architecture%-*-release-%build%-*.7z" (
-    del /q "%~dp0\latest releases\%architecture%-*-release-%build%-*.7z"
+if exist "%~dp0\%architecture%-*-release-%build%-*.7z" (
+    del /q "%~dp0\%architecture%-*-release-%build%-*.7z"
 )
 echo --------------------------------------------------
-curl -L -o "%~dp0\latest releases\%file%" %url%
+curl -L -o "%~dp0\%file%" %url%
 
 :install
 if not exist "%installPath%" (
@@ -109,7 +106,7 @@ if not exist "%installPath%" (
 )
 pushd "%installPath%"
 echo --------------------------------------------------
-tar -zxvf "%~dp0\latest releases\%file%" -C "." --strip-components=1 "mingw64/*"
+tar -zxvf "%~dp0\%file%" -C "." --strip-components=1 "mingw64/*"
 echo %path% | findstr /i "%cd%\bin" > nul
 if %errorlevel% neq 0 (
     echo --------------------------------------------------  
