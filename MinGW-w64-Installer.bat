@@ -1,5 +1,6 @@
 @echo off
-title MinGW-w64 Installer
+set version=1.0
+title MinGW-w64 Installer v%version%
 ping /n 1 github.com > nul
 if %errorLevel% neq 0 (
    echo No server connection. Please check your internet connection and try again.
@@ -14,7 +15,7 @@ if %errorLevel% equ 0 (
    echo * Run as administrator to be able to change the system variable, or continue with a local installation. *
    echo.
 )
-echo MinGW-w64 Installer
+echo MinGW-w64 Installer v%version%
 echo ==================================================
 echo [1] 32 bits, Minimal C Runtime, DWARF, Universal C Runtime
 echo [2] 32 bits, Subsystem POSIX, DWARF, Microsoft Visual C++ Runtime
@@ -27,46 +28,46 @@ echo [8] 64 bits, Subsystem POSIX, SHE, Universal C Runtime
 echo [9] 64 bits, Subsystem Win32, SHE, Microsoft Visual C++ Runtime
 echo [0] 64 bits, Subsystem Win32, SHE, Universal C Runtime
 echo ==================================================
-choice /c 1234567890 /n /m "Choose a version of MinGW-w64:"
+choice /c 1234567890 /n /m "Select a MinGW-w64 configuration:"
 if %errorLevel% equ 1 (
     set architecture=i686
-    set version=mcf-dwarf-ucrt
+    set configuration=mcf-dwarf-ucrt
 )
 if %errorLevel% equ 2 (
     set architecture=i686
-    set version=posix-dwarf-msvcrt
+    set configuration=posix-dwarf-msvcrt
 )
 if %errorLevel% equ 3 (
     set architecture=i686
-    set version=posix-dwarf-ucrt
+    set configuration=posix-dwarf-ucrt
 )
 if %errorLevel% equ 4 (
     set architecture=i686
-    set version=win32-dwarf-msvcrt
+    set configuration=win32-dwarf-msvcrt
 )
 if %errorLevel% equ 5 (
     set architecture=i686
-    set version=win32-dwarf-ucrt
+    set configuration=win32-dwarf-ucrt
 )
 if %errorLevel% equ 6 (
     set architecture=x86_64
-    set version=mcf-seh-ucrt
+    set configuration=mcf-seh-ucrt
 )
 if %errorLevel% equ 7 (
     set architecture=x86_64
-    set version=posix-seh-msvcrt
+    set configuration=posix-seh-msvcrt
 )
 if %errorLevel% equ 8 (
     set architecture=x86_64
-    set version=posix-seh-ucrt
+    set configuration=posix-seh-ucrt
 )
 if %errorLevel% equ 9 (
     set architecture=x86_64
-    set version=win32-seh-msvcrt
+    set configuration=win32-seh-msvcrt
 )
 if %errorLevel% equ 10 (
     set architecture=x86_64
-    set version=win32-seh-ucrt
+    set configuration=win32-seh-ucrt
 )
 echo --------------------------------------------------
 if %administrator% equ 1 (
@@ -91,7 +92,7 @@ for /f "tokens=1,2,3 delims=-" %%A in ("%latestRelease%") do (
     set runtime=%%B
     set revision=%%C
 )
-set file=%architecture%-%release%-release-%version%-%runtime%-%revision%.7z
+set file=%architecture%-%release%-release-%configuration%-%runtime%-%revision%.7z
 set url=https://github.com/niXman/mingw-builds-binaries/releases/download/%latestRelease%/%file%
 echo --------------------------------------------------
 curl -L -o %file% %url%
