@@ -1,7 +1,7 @@
 # MinGW-w64 Binaries
 
 [![Build release](https://img.shields.io/github/v/release/niXman/mingw-builds-binaries)](https://github.com/niXman/mingw-builds-binaries/releases/latest)
-[![Installer version](https://img.shields.io/badge/installer_version-v1.0-blue)](https://github.com/KaioHSG/mingw-builds-binaries-installer/tree/installer)
+[![Installer version](https://img.shields.io/badge/installer_version-v1.1-blue)](https://github.com/KaioHSG/mingw-builds-binaries-installer/tree/installer)
 [![Downloads](https://img.shields.io/github/downloads/niXman/mingw-builds-binaries/total)](https://github.com/niXman/mingw-builds-binaries/releases)
 [![Build status](https://github.com/niXman/mingw-builds-binaries/actions/workflows/build.yml/badge.svg)](https://github.com/niXman/mingw-builds-binaries/actions/workflows/build.yml)
 
