@@ -1,5 +1,5 @@
 @echo off
-set version=1.1
+set version=1.2
 title MinGW-w64 Installer v%version%
 whoami /groups | find "S-1-16-12288" > nul
 if %errorLevel% equ 0 (
@@ -72,13 +72,13 @@ if %errorLevel% equ 2 (
 )
 ping /n 1 github.com > nul
 if %errorLevel% neq 0 (
-    if not exist "%~dp0\%architecture%-*-release-%build%-*.7z" (
+    if not exist "%~dp0\latest-builds\%architecture%-*-release-%build%-*.7z" (
         echo ##################################################
         echo No server connection. Please check your internet connection and try again.
         pause > nul
         exit
     )
-    for %%f in ("%~dp0\%architecture%-*-release-%build%-*.7z") do (
+    for %%f in ("%~dp0\latest-builds\%architecture%-*-release-%build%-*.7z") do (
         set file=%%~nxf
     )
     goto :install
@@ -93,31 +93,44 @@ for /f "tokens=1,2,3 delims=-" %%A in ("%latestRelease%") do (
     set revision=%%C
 )
 set file=%architecture%-%release%-release-%build%-%runtime%-%revision%.7z
-set url=https://github.com/niXman/mingw-builds-binaries/releases/download/%latestRelease%/%file%
-if exist "%~dp0\%architecture%-*-release-%build%-*.7z" (
-    del /q "%~dp0\%architecture%-*-release-%build%-*.7z"
+if not exist "%~dp0\latest-builds\%file%" (
+    if not exist "%~dp0\latest-builds" (
+        mkdir "latest-builds"
+    )
+    if exist "%~dp0\latest-builds\%architecture%-*-release-%build%-*.7z" (
+        del /q "%~dp0\latest-builds\%architecture%-*-release-%build%-*.7z"
+    )
+    echo --------------------------------------------------
+    curl -L -o "%~dp0\latest-builds\%file%" "https://github.com/niXman/mingw-builds-binaries/releases/download/%latestRelease%/%file%"
 )
-echo --------------------------------------------------
-curl -L -o "%~dp0\%file%" %url%
 
 :install
 if not exist "%installPath%" (
    mkdir "%installPath%"
+) else (
+   rmdir "%installPath%" /s /q
+   mkdir "%installPath%"
 )
 pushd "%installPath%"
 echo --------------------------------------------------
-tar -zxvf "%~dp0\%file%" -C "." --strip-components=1 "mingw64/*"
+if %architecture% equ i686 (
+    set architecture=32
+) else (
+    set architecture=64
+)
+tar -zxvf "%~dp0\latest-builds\%file%" -C "." --strip-components=1 "mingw%architecture%/*"
 echo %path% | findstr /i "%cd%\bin" > nul
-if %errorlevel% neq 0 (
+if %errorLevel% neq 0 (
     echo --------------------------------------------------  
     if %administrator% equ 1 (
         setx /m path "%cd%\bin";"%path%"
     ) else (
         setx path "%cd%\bin";"%path%"
     )
-    echo To uninstall just delete this folder and remove the environment variable from this path. > "How to uninstall.txt"
 )
+echo To uninstall just delete this folder and remove the environment variable from this path. > "How to uninstall.txt"
 echo ##################################################
 echo Install finish.
+echo To uninstall just delete the MinGW folder and remove the environment variable from the path.
 pause > nul
 exit
