@@ -1,5 +1,7 @@
 @echo off
-set version=1.2
+set version=1.3
+pushd "%~dp0"
+if exist "gcc.exe" goto :updater
 title MinGW-w64 Installer v%version%
 whoami /groups | find "S-1-16-12288" > nul
 if %errorLevel% equ 0 (
@@ -73,13 +75,13 @@ if %errorLevel% equ 2 (
 ping /n 1 github.com > nul
 if %errorLevel% neq 0 (
     if not exist "%~dp0\latest-builds\%architecture%-*-release-%build%-*.7z" (
-        echo ##################################################
-        echo No server connection. Please check your internet connection and try again.
-        pause > nul
-        exit
+       echo ##################################################
+       echo No server connection. Please check your internet connection and try again.
+       pause > nul
+       exit
     )
     for %%f in ("%~dp0\latest-builds\%architecture%-*-release-%build%-*.7z") do (
-        set file=%%~nxf
+       set file=%%~nxf
     )
     goto :install
 )
@@ -87,18 +89,18 @@ curl -s https://api.github.com/repos/niXman/mingw-builds-binaries/releases/lates
 for /f "tokens=2 delims=:," %%A in ('findstr /i "tag_name" %temp%\latest-release.json') do set latestRelease=%%A
 del /q "%temp%\latest-release.json"
 set "latestRelease=%latestRelease:~2,-1%"
-for /f "tokens=1,2,3 delims=-" %%A in ("%latestRelease%") do (
+for /f "tokens=1-3 delims=-" %%A in ("%latestRelease%") do (
     set release=%%A
     set runtime=%%B
     set revision=%%C
 )
 set file=%architecture%-%release%-release-%build%-%runtime%-%revision%.7z
-if not exist "%~dp0\latest-builds\%file%" (
+if not exist "latest-builds\%file%" (
     if not exist "%~dp0\latest-builds" (
-        mkdir "latest-builds"
+       mkdir "%~dp0\latest-builds"
     )
     if exist "%~dp0\latest-builds\%architecture%-*-release-%build%-*.7z" (
-        del /q "%~dp0\latest-builds\%architecture%-*-release-%build%-*.7z"
+       del /q "%~dp0\latest-builds\%architecture%-*-release-%build%-*.7z"
     )
     echo --------------------------------------------------
     curl -L -o "%~dp0\latest-builds\%file%" "https://github.com/niXman/mingw-builds-binaries/releases/download/%latestRelease%/%file%"
@@ -112,25 +114,108 @@ if not exist "%installPath%" (
    mkdir "%installPath%"
 )
 pushd "%installPath%"
-echo --------------------------------------------------
 if %architecture% equ i686 (
-    set architecture=32
+    set arch=32
 ) else (
-    set architecture=64
+    set arch=64
 )
-tar -zxvf "%~dp0\latest-builds\%file%" -C "." --strip-components=1 "mingw%architecture%/*"
+echo --------------------------------------------------
+tar -zxvf "%~dp0\latest-builds\%file%" -C "." --strip-components=1 "mingw%arch%/*"
 echo %path% | findstr /i "%cd%\bin" > nul
 if %errorLevel% neq 0 (
     echo --------------------------------------------------  
     if %administrator% equ 1 (
-        setx /m path "%cd%\bin";"%path%"
+       setx /m path "%cd%\bin";"%path%"
     ) else (
-        setx path "%cd%\bin";"%path%"
+       setx path "%cd%\bin";"%path%"
     )
 )
+echo --------------------------------------------------  
+xcopy "%~s0" "%installPath%\bin\update-mingw.bat" /-i
+(
+    echo %installPath%
+    echo %architecture%
+    echo %release%
+    echo %build%
+    echo %runtime%
+    echo %revision%
+) > "%installPath%\update-mingw-data"
 echo To uninstall just delete this folder and remove the environment variable from this path. > "How to uninstall.txt"
 echo ##################################################
 echo Install finish.
+echo To update MinGW-w64 use 'update-mingw'.
 echo To uninstall just delete the MinGW folder and remove the environment variable from the path.
 pause > nul
+exit
+
+:updater
+echo MinGW-w64 Updater v%version%
+if not exist "..\update-mingw-data" (
+    echo The file 'update-mingw-data' was not found.
+    echo.
+    exit
+)
+for /f "tokens=1* delims=" %%A in ('type "..\update-mingw-data"') do (
+    if not defined installPath (
+        set "installPath=%%A"
+    ) else if not defined architecture (
+        set "architecture=%%A"
+    ) else if not defined releaseCurrent (
+        set "releaseCurrent=%%A"
+    ) else if not defined build (
+        set "build=%%A"
+    ) else if not defined runtimeCurrent (
+        set "runtimeCurrent=%%A"
+    ) else if not defined revisionCurrent (
+        set "revisionCurrent=%%A"
+    )
+)
+ping /n 1 github.com > nul
+if %errorLevel% neq 0 (
+    echo No server connection. Please check your internet connection and try again.
+    echo.
+    exit
+)
+curl -s https://api.github.com/repos/niXman/mingw-builds-binaries/releases/latest > %temp%\latest-release.json
+for /f "tokens=2 delims=:," %%A in ('findstr /i "tag_name" %temp%\latest-release.json') do set latestRelease=%%A
+del /q "%temp%\latest-release.json"
+set "latestRelease=%latestRelease:~2,-1%"
+for /f "tokens=1,2,3 delims=-" %%A in ("%latestRelease%") do (
+    set release=%%A
+    set runtime=%%B
+    set revision=%%C
+)
+if %releaseCurrent% equ %release% (
+    echo Latest version installed.
+    echo.
+    exit
+)
+set file=%architecture%-%release%-release-%build%-%runtime%-%revision%.7z
+echo --------------------------------------------------
+curl -L -o "%temp%\%file%" "https://github.com/niXman/mingw-builds-binaries/releases/download/%latestRelease%/%file%"
+pushd "%installPath%"
+if %architecture% equ i686 (
+    set arch=32
+) else (
+    set arch=64
+)
+echo --------------------------------------------------
+tar -zxvf "%temp%\%file%" -C "." --strip-components=1 "mingw%arch%/*"
+if %errorLevel% neq 0 (
+    del /q "%temp%\%file%"
+    echo.
+    exit
+)
+del /q "%temp%\%file%"
+(
+    echo %installPath%
+    echo %architecture%
+    echo %release%
+    echo %build%
+    echo %runtime%
+    echo %revision%
+) > "%installPath%\update-mingw-data"
+echo ##################################################
+echo Update finish.
+echo.
 exit
