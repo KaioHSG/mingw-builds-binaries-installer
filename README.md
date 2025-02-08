@@ -13,6 +13,6 @@ The installer provides options to select the build parameters you need, then dow
 It also creates an environment variable for the path to the binaries (including local installations).
 And now you can use the `update-mingw` command to check for updates.
 
-[![Installer](https://github.com/user-attachments/assets/c17a1aa3-0e61-41e0-9bb9-ffa9d333af67)](#)
+[![Installer](https://github.com/user-attachments/assets/09063801-c594-447a-b880-cb469dc2383c)](#)
 
 
