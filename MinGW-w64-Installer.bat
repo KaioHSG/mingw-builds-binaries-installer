@@ -1,5 +1,5 @@
 @echo off
-set version=1.3
+set version=1.4
 pushd "%~dp0"
 if exist "gcc.exe" goto :updater
 title MinGW-w64 Installer v%version%
@@ -20,11 +20,11 @@ echo [2] 32 bits, Subsystem POSIX, DWARF, Microsoft Visual C++ Runtime
 echo [3] 32 bits, Subsystem POSIX, DWARF, Universal C Runtime
 echo [4] 32 bits, Subsystem Win32, DWARF, Microsoft Visual C++ Runtime
 echo [5] 32 bits, Subsystem Win32, DWARF, Universal C Runtime
-echo [6] 64 bits, Minimal C Runtime, SHE, Universal C Runtime 
-echo [7] 64 bits, Subsystem POSIX, SHE, Microsoft Visual C++ Runtime
-echo [8] 64 bits, Subsystem POSIX, SHE, Universal C Runtime
-echo [9] 64 bits, Subsystem Win32, SHE, Microsoft Visual C++ Runtime
-echo [0] 64 bits, Subsystem Win32, SHE, Universal C Runtime
+echo [6] 64 bits, Minimal C Runtime, SEH, Universal C Runtime 
+echo [7] 64 bits, Subsystem POSIX, SEH, Microsoft Visual C++ Runtime
+echo [8] 64 bits, Subsystem POSIX, SEH, Universal C Runtime
+echo [9] 64 bits, Subsystem Win32, SEH, Microsoft Visual C++ Runtime
+echo [0] 64 bits, Subsystem Win32, SEH, Universal C Runtime
 echo ==================================================
 choice /c 1234567890 /n /m "Select a MinGW-w64 build:"
 if %errorLevel% equ 1 (
